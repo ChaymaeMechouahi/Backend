@@ -24,15 +24,17 @@ router.get('/', (req, res) => {
         .then(response => {
             const imageBuffer = Buffer.from(response.data, 'binary');
             const encodedImage = imageBuffer.toString('base64');
+           // Créer l'objet représentant les données de l'image
+           const imageJSON = JSON.stringify(encodedImage);
+           const image = {
+            num_edition: 18, // Remplacez par le numéro d'édition approprié
+            img: imageJSON
+        };
 
-            // Convertir l'image encodée en format JSON
-            const image = { img: encodedImage };
-            const imageJSON = JSON.stringify(image);
+        // Insérer l'image dans la base de données
+        const sql = 'INSERT INTO image SET ?'; 
 
-            // Insérer l'image JSON dans la base de données
-            const sql = 'INSERT INTO image VALUES (18, ?);';//18 pour essayer  
-
-            connection.query(sql, imageJSON, (err, result) => {
+            connection.query(sql, image, (err, result) => {
                 if (err) {
                     console.error(err);
                     res.status(500).send('Erreur lors de l\'insertion de l\'image dans la base de données.');
