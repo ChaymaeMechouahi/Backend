@@ -132,38 +132,7 @@ router.get('/:num/dateD', (req, res) => {
       }
     });
   });
-// Route pour récupérer une image d'édition
-router.get('/:num/image', (req, res) => {
-  const num = req.params.num;
-  const query = `
-    SELECT image
-    FROM edition
-    WHERE num = ?
-  `;
-  connection.query(query, [num], (error, results, fields) => {
-    if (error) {
-      console.error('Erreur lors de la récupération de l\'URL de l\'image :', error);
-      res.status(500).send('Erreur lors de la récupération de l\'URL de l\'image.');
-    } else if (results.length === 0) {
-      res.status(404).send('Edition non trouvée.');
-    } else {
-      const imageUrl = results[0].image_url;
 
-      // Utiliser axios pour récupérer l'image depuis l'URL
-      axios.get(imageUrl, { responseType: 'arraybuffer' })
-        .then(response => {
-          // Convertir l'image en base64
-          const imageData = Buffer.from(response.data, 'binary').toString('base64');
-          const jsonImage = { image: imageData };
-          res.json(jsonImage);
-        })
-        .catch(error => {
-          console.error('Erreur lors de la récupération de l\'image :', error);
-          res.status(500).send('Erreur lors de la récupération de l\'image.');
-        });
-    }
-  });
-});
   
 
 module.exports = router;
