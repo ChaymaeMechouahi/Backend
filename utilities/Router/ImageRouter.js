@@ -18,7 +18,7 @@ connection.connect((err) => {
 
 // Route GET pour stocker l'image dans la base de données
 router.get('/', (req, res) => {
-    const imageUrl = 'https://marrakech-festival.com/wp-content/uploads/revslider/slider-2/fifm_19e.jpg';
+    const imageUrl = '';
 
     axios.get(imageUrl, { responseType: 'arraybuffer' })
         .then(response => {
@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
            // Créer l'objet représentant les données de l'image
            const imageJSON = JSON.stringify(encodedImage);
            const image = {
-            num_edition: 18, // Remplacez par le numéro d'édition approprié
+            num_edition: 14, // Remplacez par le numéro d'édition approprié
             img: imageJSON
         };
 
@@ -52,5 +52,48 @@ router.get('/', (req, res) => {
             connection.end(); // Fermer la connexion à la base de données
         });
 });
-
+router.get('/:num/:id', (req, res) => {
+    const imageId = req.params.id;
+    const num = req.params.num;
+    const sqlQuery = 'SELECT img FROM image WHERE id = ? AND num_edition = ?';
+  
+    connection.query(sqlQuery, [imageId, num], (err, results) => {
+      if (err) {
+        console.error('Erreur lors de la récupération de l\'image :', err);
+        res.sendStatus(500);
+      } else {
+        if (results.length === 0) {
+          res.sendStatus(404);
+        } else {
+          const imageData = results[0].img;
+          const base64Image = Buffer.from(imageData).toString('base64');
+          const imageJSON = { id: imageId, data: base64Image };
+          res.json(imageJSON);
+        }
+      }
+    });
+  });
+  router.get('/:num', (req, res) => {
+    const num = req.params.num;
+    const sqlQuery = 'SELECT img FROM image WHERE num_edition = ?';
+    
+    connection.query(sqlQuery, [num], (err, results) => {
+    if (err) {
+    console.error('Erreur lors de la récupération des images :', err);
+    res.sendStatus(500);
+    } else {
+    if (results.length === 0) {
+    res.sendStatus(404);
+    } else {
+    const imageList = results.map((row) => {
+    const imageData = row.img;
+    const base64Image = Buffer.from(imageData).toString('base64');
+    return { num_edition: row.num_edition, data: base64Image };
+    });
+    res.json(imageList);
+    }
+    }
+    });
+    });
+  
 module.exports = router;
