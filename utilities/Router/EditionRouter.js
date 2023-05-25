@@ -33,7 +33,7 @@ router.get('/', (req, res) => {
 });
 
 // Route pour récupérer une édition par son numéro
-/*router.get('/:num', (req, res) => {
+router.get('/:num', (req, res) => {
   const numEdition = req.params.num;
   const query = `
     SELECT *
@@ -132,7 +132,7 @@ router.get('/:num/dateD', (req, res) => {
       }
     });
   });
-*/
+
   
 
 module.exports = router;
