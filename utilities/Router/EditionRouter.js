@@ -27,13 +27,13 @@ router.get('/', (req, res) => {
       console.error('Erreur lors de la récupération des éditions :', error);
       res.status(500).send('Erreur lors de la récupération des éditions.');
     } else {
-      res.send(results);
+      res.status(200).send(results);
     }
   });
 });
 
 // Route pour récupérer une édition par son numéro
-router.get('/:num', (req, res) => {
+/*router.get('/:num', (req, res) => {
   const numEdition = req.params.num;
   const query = `
     SELECT *
@@ -47,7 +47,7 @@ router.get('/:num', (req, res) => {
     } else if (results.length === 0) {
       res.status(404).send('L\'édition demandée n\'existe pas.');
     } else {
-      res.send(results[0]);
+      res.status(200).send(results[0]);
     }
   });
 });
@@ -67,7 +67,7 @@ router.get('/:num/titre', (req, res) => {
         res.status(404).send('Edition non trouvée.');
       } else {
         const titre = results[0].titre;
-        res.send(titre);
+        res.status(200).send(titre);
       }
     });
   });
@@ -88,7 +88,7 @@ router.get('/:num/texte', (req, res) => {
         res.status(404).send('Edition non trouvée.');
       } else {
         const texte = results[0].texte;
-        res.send(texte);
+        res.status(200).send(texte);
       }
     });
   });
@@ -108,7 +108,7 @@ router.get('/:num/dateD', (req, res) => {
         res.status(404).send('Edition non trouvée.');
       } else {
         const dateD = results[0].dateD;
-        res.send(dateD);
+        res.status(200).send(dateD);
       }
     });
   });
@@ -128,42 +128,11 @@ router.get('/:num/dateD', (req, res) => {
         res.status(404).send('Edition non trouvée.');
       } else {
         const dateF = results[0].dateF;
-        res.send(dateF);
+        res.status(200).send(dateF);
       }
     });
   });
-// Route pour récupérer une image d'édition
-router.get('/:num/image', (req, res) => {
-  const num = req.params.num;
-  const query = `
-    SELECT image
-    FROM edition
-    WHERE num = ?
-  `;
-  connection.query(query, [num], (error, results, fields) => {
-    if (error) {
-      console.error('Erreur lors de la récupération de l\'URL de l\'image :', error);
-      res.status(500).send('Erreur lors de la récupération de l\'URL de l\'image.');
-    } else if (results.length === 0) {
-      res.status(404).send('Edition non trouvée.');
-    } else {
-      const imageUrl = results[0].image_url;
-
-      // Utiliser axios pour récupérer l'image depuis l'URL
-      axios.get(imageUrl, { responseType: 'arraybuffer' })
-        .then(response => {
-          // Convertir l'image en base64
-          const imageData = Buffer.from(response.data, 'binary').toString('base64');
-          const jsonImage = { image: imageData };
-          res.json(jsonImage);
-        })
-        .catch(error => {
-          console.error('Erreur lors de la récupération de l\'image :', error);
-          res.status(500).send('Erreur lors de la récupération de l\'image.');
-        });
-    }
-  });
-});
+*/
   
 
 module.exports = router;
