@@ -26,9 +26,7 @@ app.get('/', (req, res) => {
   // Gérer la requête
   res.status(200).end('Bonjour, ceci est la route principale');
 });
-app.use(cors({
-  origin: 'http://localhost:3005' // Remplacez par votre domaine autorisé
-}));
+
 // Démarrage du serveur
 app.listen(3005, () => {
   console.log('Le serveur est en écoute sur le port 3005');
