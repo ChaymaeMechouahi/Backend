@@ -55,7 +55,7 @@ router.get('/:num/:id', (req, res) => {
         } else {
           const imageData = results[0].img;
           const base64Image = Buffer.from(imageData).toString('base64');
-          const imageJSON = { id: imageId, img: base64Image };
+          const imageJSON = { img: base64Image };
           res.json(imageJSON);
         }
       }

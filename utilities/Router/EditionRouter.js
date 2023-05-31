@@ -93,7 +93,7 @@ router.get('/:num/texte', (req, res) => {
     });
   });
   // Route pour récupérer le date début d'une édition
-router.get('/:num/dateD', (req, res) => {
+  router.get('/:num/dateD', (req, res) => {
     const num = req.params.num;
     const query = `
       SELECT dateD
@@ -102,16 +102,17 @@ router.get('/:num/dateD', (req, res) => {
     `;
     connection.query(query, [num], (error, results, fields) => {
       if (error) {
-        console.error('Erreur lors de la récupération du date Début :', error);
-        res.status(500).send('Erreur lors de la récupération du date Début.');
+        console.error('Erreur lors de la récupération de la date de début :', error);
+        res.status(500).send('Erreur lors de la récupération de la date de début.');
       } else if (results.length === 0) {
         res.status(404).send('Edition non trouvée.');
       } else {
-        const dateD = results[0].dateD;
+        const dateD = results[0].dateD.toString(); // Convertir la date en chaîne de caractères
         res.status(200).send(dateD);
       }
     });
   });
+  
   // Route pour récupérer le date de fin d'une édition
   router.get('/:num/dateF', (req, res) => {
     const num = req.params.num;
