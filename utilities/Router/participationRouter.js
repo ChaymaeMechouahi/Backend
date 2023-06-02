@@ -67,6 +67,44 @@ connection.query(query,[id_participant, num_edition], (error, results, fields) =
   }
 });
 });
+  // Route pour récupérer toutes le prix d'un participant  dans une édition
+  router.get('/:id_participant/:num_edition/prix', (req, res) => {
+    const id_participant = req.params.id_participant;
+    const num_edition = req.params.num_edition;
+
+const query = `
+  SELECT prix
+  FROM participation
+  WHERE id_participant = ?  AND num_edition = ?
+`;
+connection.query(query,[id_participant, num_edition], (error, results, fields) => {
+  if (error) {
+    console.error('Erreur lors de la récupération des participations :', error);
+    res.status(500).send('Erreur lors de la récupération des participations.');
+  } else {
+    res.send(results);
+  }
+});
+});
+  // Route pour récupérer toutes le prix d'un participant  dans une édition
+  router.get('/:id_participant/:num_edition/film', (req, res) => {
+    const id_participant = req.params.id_participant;
+    const num_edition = req.params.num_edition;
+
+const query = `
+  SELECT film
+  FROM participation
+  WHERE id_participant = ?  AND num_edition = ?
+`;
+connection.query(query,[id_participant, num_edition], (error, results, fields) => {
+  if (error) {
+    console.error('Erreur lors de la récupération des participations :', error);
+    res.status(500).send('Erreur lors de la récupération des participations.');
+  } else {
+    res.send(results);
+  }
+});
+});
  
 
 // Route pour récupérer les données de  participations d'une édition donnée pour un participant 
