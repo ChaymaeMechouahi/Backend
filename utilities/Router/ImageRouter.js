@@ -61,25 +61,28 @@ router.get('/:num/:id', (req, res) => {
       }
     });
   });
-  router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    const sqlQuery = 'SELECT img FROM image WHERE id = ? ';
+  router.get('/:num', (req, res) => {
+    const num_edition = req.params.num;
+    const sqlQuery = 'SELECT img FROM image WHERE num_edition = ?';
   
-    connection.query(sqlQuery, [id], (err, results) => {
+    connection.query(sqlQuery, [num_edition], (err, results) => {
       if (err) {
-        console.error('Erreur lors de la récupération de l\'image :', err);
+        console.error('Erreur lors de la récupération des images :', err);
         res.sendStatus(500);
       } else {
         if (results.length === 0) {
           res.sendStatus(404);
         } else {
-          const imageData = results[0].img;
-          const base64Image = Buffer.from(imageData).toString('base64');
-          const imageJSON = {  img: base64Image };
-          res.json(imageJSON);
+          const imageUrls = results.map((result) => {
+            const imageData = result.img;
+            const base64Image = Buffer.from(imageData).toString('base64');
+            return { img: base64Image };
+          });
+          res.json(imageUrls);
         }
       }
     });
   });
+  
   
 module.exports = router;
