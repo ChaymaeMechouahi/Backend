@@ -49,7 +49,7 @@ router.get('/:id', (req, res) => {
       res.send(results[0]);
     }
   });
-});
+});   
 // Route pour récupérer le nom d'une édition
 router.get('/:id/nom', (req, res) => {
   const id = req.params.id;
